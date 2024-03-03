@@ -2,10 +2,9 @@
  Módulo que define los servicios del usuario
 """
 from typing import List, Optional
-
 from fastapi import Depends
-from infrastrucure.security.authtentication import get_password_hash
 
+from infrastrucure.security.authtentication import get_password_hash
 from models.UserModel import User
 from repositories.user_repository import UserRepository
 from schemas.user_schema import (

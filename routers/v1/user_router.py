@@ -11,7 +11,8 @@ from schemas.user_schema import (
     UserUpdateRequestSchema
     )
 from services.user_service import UserService
-
+from infrastrucure.decorators.role_decorator import has_permission
+from infrastrucure.security.authtentication import oauth2_scheme
 
 UserRouter = APIRouter(
     prefix="/users", tags=["User"],
@@ -19,13 +20,15 @@ UserRouter = APIRouter(
 )
 
 @UserRouter.get("/", response_model=List[UserSchema])
+@has_permission('admin')
 async def get_all_users(
     limit: int = Query(None, description="Limitar el número de resultados"),
     start: int = Query(None, description="Comenzar los resultados desde este índice"),
     username: str = Query(None, description="Valor de nombre de usuario"),
     email: str = Query(None, description="Valor de correo electrónico"),
     role_id: int = Query(None, description="ID del rol"),
-    user_service: UserService = Depends()
+    user_service: UserService = Depends(),
+    token: str = Depends(oauth2_scheme)
 ):
     """
     Obtener una lista de usuarios con filtros opcionales.

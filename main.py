@@ -37,6 +37,5 @@ app.add_middleware(SQLAlchemyMiddleware)
 app.include_router(UserRouter)
 app.include_router(AuthRouter)
 
-
 # Initialize Data Model Attributes
 init()
