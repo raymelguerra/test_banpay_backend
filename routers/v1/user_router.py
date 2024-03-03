@@ -3,6 +3,8 @@
 """
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Query
+from infrastrucure.decorators.role_decorator import has_permission
+from infrastrucure.security.authtentication import oauth2_scheme
 
 from schemas.user_schema import (
     UserSchema,
@@ -18,13 +20,15 @@ UserRouter = APIRouter(
 )
 
 @UserRouter.get("/", response_model=List[UserSchema])
+@has_permission('admin')
 async def get_all_users(
     limit: int = Query(None, description="Limitar el número de resultados"),
     start: int = Query(None, description="Comenzar los resultados desde este índice"),
     username: str = Query(None, description="Valor de nombre de usuario"),
     email: str = Query(None, description="Valor de correo electrónico"),
     role_id: int = Query(None, description="ID del rol"),
-    user_service: UserService = Depends()
+    user_service: UserService = Depends(),
+    _token: str = Depends(oauth2_scheme)
 ):
     """
     Obtener una lista de usuarios con filtros opcionales.
@@ -46,7 +50,11 @@ async def get_all_users(
     return users
 
 @UserRouter.get("/{user_id}", response_model=UserSchema)
-async def get_user(user_id: int, user_service: UserService = Depends()):
+@has_permission('admin')
+async def get_user(
+    user_id: int, 
+    user_service: UserService = Depends(), 
+    _token: str = Depends(oauth2_scheme)):
     """
     Obtener un usuario por su ID.
 
@@ -62,7 +70,11 @@ async def get_user(user_id: int, user_service: UserService = Depends()):
     return user
 
 @UserRouter.post("/", response_model=UserSchema)
-async def create_user(user: UserCreateRequestSchema, user_service: UserService = Depends()):
+@has_permission('admin')
+async def create_user(
+    user: UserCreateRequestSchema, 
+    user_service: UserService = Depends(),
+    _token: str = Depends(oauth2_scheme)):
     """
     Crear un nuevo usuario.
 
@@ -75,11 +87,12 @@ async def create_user(user: UserCreateRequestSchema, user_service: UserService =
     return user_service.create(user)
 
 @UserRouter.patch("/{user_id}", response_model=UserSchema)
+@has_permission('admin')
 def update(
     user_id: int,
     user: UserUpdateRequestSchema,
     user_service: UserService = Depends(),
-):
+    _token: str = Depends(oauth2_scheme)):
     """
     Actualizar un usuario existente.
 
@@ -96,10 +109,11 @@ def update(
     return user
 
 @UserRouter.delete("/{user_id}", response_model=UserSchema)
+@has_permission('admin')
 def delete(
     user_id: int,
     user_service: UserService = Depends(),
-):
+    _token: str = Depends(oauth2_scheme)):
     """
     Eliminar un usuario por su ID.
 
