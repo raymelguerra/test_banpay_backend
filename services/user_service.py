@@ -4,6 +4,7 @@
 from typing import List, Optional
 
 from fastapi import Depends
+from infrastrucure.security.authtentication import get_password_hash
 
 from models.UserModel import User
 from repositories.user_repository import UserRepository
@@ -42,6 +43,7 @@ class UserService:
             UserSchema: El usuario creado.
         """
         user = User(**instance.model_dump())
+        user.password = get_password_hash(user.password)
         return self.user_repository.create(user)
 
     def list(
