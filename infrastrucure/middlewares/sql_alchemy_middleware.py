@@ -1,9 +1,15 @@
+"""Middleware para intersectar todas las excepciones de SQLAlchemy
+"""
 from fastapi import Request
+from fastapi.responses import JSONResponse
 from sqlalchemy.exc import IntegrityError, NoReferencedTableError, OperationalError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_409_CONFLICT, HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST
-from fastapi.responses import JSONResponse
+from starlette.status import (
+    HTTP_500_INTERNAL_SERVER_ERROR,
+    HTTP_409_CONFLICT,
+    HTTP_404_NOT_FOUND,
+    HTTP_400_BAD_REQUEST)
 
 
 class SQLAlchemyMiddleware(BaseHTTPMiddleware):
@@ -35,7 +41,8 @@ class SQLAlchemyMiddleware(BaseHTTPMiddleware):
             call_next: La función para llamar al siguiente middleware.
 
         Returns:
-            JSONResponse: Una respuesta JSON con detalles del error y el código de estado correspondiente.
+            JSONResponse: Una respuesta JSON con detalles del error y 
+            el código de estado correspondiente.
 
         Raises:
             StarletteHTTPException: Se vuelve a lanzar una excepción de Starlette si ocurre.
@@ -46,7 +53,7 @@ class SQLAlchemyMiddleware(BaseHTTPMiddleware):
         except IntegrityError as e:
             detail = "Error de integridad: " + str(e.orig)
             status_code = HTTP_409_CONFLICT
-        except NoReferencedTableError as e:
+        except NoReferencedTableError:
             detail = "Error: No existe la tabla referenciada"
             status_code = HTTP_404_NOT_FOUND
         except OperationalError as e:

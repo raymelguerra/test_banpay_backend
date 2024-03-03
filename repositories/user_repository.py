@@ -49,8 +49,8 @@ class UserRepository():
     def list(
         self,
         query_params: Optional[Q],
-        limit: Optional[int],
-        start: Optional[int]
+        limit: Optional[int] | None = 100,
+        start: Optional[int] | None = 0
         ) -> List[User]:
         """
         Obtiene una lista de usuarios de la base de datos con filtros opcionales.

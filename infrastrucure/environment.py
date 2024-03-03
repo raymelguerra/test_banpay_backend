@@ -29,6 +29,9 @@ class EnvironmentSettings(BaseSettings):
     DATABASE_PORT: int
     DATABASE_USERNAME: str
     DEBUG_MODE: bool
+    SECRET_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
 
     class Config:
         """
