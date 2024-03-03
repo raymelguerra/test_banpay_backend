@@ -17,7 +17,7 @@ def has_permission(role_name: str):
     def decorator(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):
-            token = kwargs.get("token")
+            token = kwargs.get("_token")
             if not token:
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
@@ -28,14 +28,12 @@ def has_permission(role_name: str):
                 # Decodifica el token JWT
                 env = get_environment_variables()
                 payload = jwt.decode(token, env.SECRET_KEY, algorithms=[env.ALGORITHM])
-                # Verifica si el rol del usuario está en la lista de roles permitidos
-                if payload["role"] != role_name:
+                if payload["role"] != 'admin' and payload["role"] != role_name:
                     raise HTTPException(
                         status_code=status.HTTP_403_FORBIDDEN,
                         detail="Permisos insuficientes"
                     )
 
-                # Llama a la función original
                 return await func(*args, **kwargs)
 
             except JWTError as exc:

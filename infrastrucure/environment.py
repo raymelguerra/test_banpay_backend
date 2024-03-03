@@ -32,6 +32,7 @@ class EnvironmentSettings(BaseSettings):
     SECRET_KEY: str
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
+    GHIBLI_API:str
 
     class Config:
         """

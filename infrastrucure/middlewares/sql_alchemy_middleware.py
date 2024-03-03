@@ -1,6 +1,7 @@
 """Middleware para intersectar todas las excepciones de SQLAlchemy
 """
 from fastapi import Request
+from fastapi.exceptions import ResponseValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import IntegrityError, NoReferencedTableError, OperationalError
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -61,8 +62,8 @@ class SQLAlchemyMiddleware(BaseHTTPMiddleware):
             status_code = HTTP_400_BAD_REQUEST
         except StarletteHTTPException as e:
             raise e
-        except Exception as e:
-            detail = "Error interno del servidor"
+        except (ValueError, TypeError, ResponseValidationError) as e:
+            detail = "Error interno del servidor: " + str(e)
             status_code = HTTP_500_INTERNAL_SERVER_ERROR
 
         response_body = {"detail": detail, "status_code": status_code}

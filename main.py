@@ -10,6 +10,7 @@ from infrastrucure.middlewares.sql_alchemy_middleware import SQLAlchemyMiddlewar
 from metadata.tags import Tags
 from models.BaseModel import init
 from routers.v1.auth_router import AuthRouter
+from routers.v1.ghibli_router import GhibliRouter
 from routers.v1.user_router import UserRouter
 
 # Application Environment Configuration
@@ -36,6 +37,7 @@ app.add_middleware(SQLAlchemyMiddleware)
 # Add Routers
 app.include_router(UserRouter)
 app.include_router(AuthRouter)
+app.include_router(GhibliRouter)
 
 # Initialize Data Model Attributes
 init()
