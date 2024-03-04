@@ -107,10 +107,11 @@ def test_list_users(user_repository: UserRepository, db_session: Session):
     db_session.commit()
 
     users = user_repository.list(query_params=None, limit=10, start=0)
-    assert len(users) == 2
+    assert len(users) == 3
 
     # Limpiar después de la prueba
-    db_session.query(User).delete()
+    for new_user in user_data:
+        db_session.delete(new_user)
     db_session.commit()
 
 
@@ -203,5 +204,6 @@ def test_list_users_with_filters(user_repository: UserRepository, db_session: Se
     assert len(users) == 1
     assert users[0].username == "david"
 
-    db_session.query(User).delete()
+    # for new_user in user_data:
+    db_session.delete(new_user)
     db_session.commit()
