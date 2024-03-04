@@ -28,10 +28,26 @@ Este proyecto está organizado siguiendo los principios de *Clean Architecture*,
   
 - [![Pylint](https://img.shields.io/badge/Pylint-1976D2?style=for-the-badge&logo=pylint&logoColor=white)](https://pylint.pycqa.org/) **Pylint:** Linter utilizado para mejorar la calidad del código. Realiza análisis estático del código Python en busca de posibles errores, convenciones de estilo y mejoras de rendimiento.
 
-
 Además, el proyecto sigue las normas y principios de [![OpenAPI](https://img.shields.io/badge/openapi-6BA539?style=for-the-badge&logo=openapi-initiative&logoColor=fff)](https://www.openapis.org/) para definir y documentar las APIs de manera clara y estructurada.
 
-El proyecto se inicia con una inicialización de roles requeridos, junto con la creación de un usuario super admin por defecto. Además, se hace uso extensivo de variables de entorno para separar la configuración y mantener la seguridad de las credenciales. Las variables de entorno forma parte de este repositorio, aunque no se considera una buena práctica se procedió a incluirlas para agilizar el proceso de prueba de la app.
+El proyecto se inicia con una inicialización de roles requeridos, junto con la creación de un usuario super admin por defecto.
+```
+username: admin
+password: P@sswOrd 
+```
+Además, se hace uso extensivo de variables de entorno para separar la configuración y mantener la seguridad de las credenciales. Las variables de entorno forman parte de este repositorio, aunque no se considera una buena práctica se procedió a incluirlas para agilizar el proceso de prueba de la app.
+
+## La aplicación cuenta con 3 módulos gestionados desde la API:
+
+### CRUDs de Usuario
+Este módulo proporciona las operaciones básicas de Crear, Leer, Actualizar y Eliminar (CRUD) para los usuarios. Permite administrar la información de los usuarios en la base de datos, como nombres, correos electrónicos y roles asignados.
+
+### Login de Acceso
+El módulo de Login de Acceso ofrece la funcionalidad para que los usuarios autenticados puedan iniciar sesión de manera segura en la aplicación. Se encarga de verificar las credenciales del usuario y generar tokens de acceso válidos.
+
+### Endpoints de Ghibli
+En este módulo se encuentran los endpoints relacionados con la API de Ghibli, que proporciona información sobre las películas del estudio Ghibli. Estos endpoints están protegidos y solo pueden ser accedidos por usuarios autenticados con roles específicos. Dependiendo del rol del usuario, se restringe el acceso a ciertas funcionalidades y datos sensibles.
+
 
 ## Detalles del Proyecto
 
@@ -49,6 +65,21 @@ Este proyecto sigue la arquitectura de Clean Architecture, lo que significa que 
 
 - Asegurate de tener postgres instalado y crea una base de datos con el nombre que tienes especificado en tu archivo .env
 
+### Clonar el Repositorio
+Para obtener una copia del repositorio en tu máquina local, puedes seguir estos pasos:
+
+- Abre tu terminal o línea de comandos.
+- Navega hasta el directorio donde deseas clonar el repositorio.
+- Ejecuta el siguiente comando para clonar el repositorio:
+
+   ```sh
+   git clone https://github.com/raymelguerra/test_banpay_backend.git
+   ```
+
+- Acceder a la carpeta del repositorio:
+   ```sh
+   cd test_banpay_backend
+   ```
 
 - Si lo desea puede crear un entorno virtual para esta app:
 
@@ -75,10 +106,10 @@ Este proyecto sigue la arquitectura de Clean Architecture, lo que significa que 
 - Si usted desea ejecutar prueba unitarias, como resultado obtendrá en la carpeta _**/test_report**_ el resultado de las pruebas unitarias configuradas.
 
   ```sh
-  $ pipenv run --html=test_report/report.html
+  $ pipenv run pytest --html=test_report/report.html
   ```
 
-_*Nota:* Es importante volver a recargar la página, ya que se hace una limpieza de los datos para pordr ejecutar las pruebas._
+_*Nota:* Es importante volver a recargar la app, ya que se hace una limpieza de los datos para porder ejecutar las pruebas. Detenga la instancia anterior y vuelva a ejecutar la app._
 
   ```sh
   $ pipenv run uvicorn main:app --reload
@@ -88,6 +119,21 @@ _*Nota:* En caso de que no puedas acceder a pipenv desde las ubicaciones de tu P
 
 # Instalación haciendo uso de Docker y Docker Compose
 
+### Clonar el Repositorio
+Para obtener una copia del repositorio en tu máquina local, puedes seguir estos pasos:
+
+- Abre tu terminal o línea de comandos.
+- Navega hasta el directorio donde deseas clonar el repositorio.
+- Ejecuta el siguiente comando para clonar el repositorio:
+
+   ```sh
+   git clone https://github.com/raymelguerra/test_banpay_backend.git
+   ```
+
+- Acceder a la carpeta del repositorio:
+   ```sh
+   cd test_banpay_backend
+   ```
 - En este archivo de *docker-compose.yml* ya tenemos además de los contenedores de la aplicación, el contenedor de postgres. Las variables de entorno configuradas para correr este docker-compose están en el fichero *prod.env*.
   
 _*Note:* Para ejecutar construir los contenedores de docker se usa *pip* porque ya viene nativo en la imagen de *python:3.12-slim* usada en este proyecto, por lo que es importante verificar que exista el archivo *requirements.txt*. Si no existe este el *requirements.txt* despues de haber intalado las dependencias con pipenv y situado dentro del entorno virtual (Ver en el apartado anterior como crear el entorno virtual e instalar dependencias), ejecutar el comando:_
