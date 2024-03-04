@@ -1,0 +1,24 @@
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pyzw
+*.pycachefile
+
+# Pytest
+__pytest_cache__
+
+# Editor/IDE specific
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Environments
+.env
+venv/
+virtualenv/
