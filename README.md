@@ -111,7 +111,7 @@ _*Note:* Para ejecutar construir los contenedores de docker se usa *pip* porque 
 - Cuando obtenga los resultados de las pruebas contenidos en la carpeta _**/test_report**_, debe reiniciar el contenedor de la app, para que se cree el usuario super admin:
 
   ```sh
-  $ docker-compose run -d banpay-app
+  $ docker-compose restart banpay-app
   ```
 
 - Abrir `localhost:8000/docs` o `localhost:8000/redoc` para la documentación de la API.
