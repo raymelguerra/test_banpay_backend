@@ -37,15 +37,31 @@ password: P@sswOrd
 ```
 Además, se hace uso extensivo de variables de entorno para separar la configuración y mantener la seguridad de las credenciales. Las variables de entorno forman parte de este repositorio, aunque no se considera una buena práctica se procedió a incluirlas para agilizar el proceso de prueba de la app.
 
-## La aplicación cuenta con 3 módulos gestionados desde la API:
+### Seguridad
 
-### CRUDs de Usuario
+A continuación, se describe algunas medidas de seguridad implementadas:
+
+- **Almacenamiento de Contraseñas**: Todas las contraseñas de los usuarios se almacenan de forma cifrada en la base de datos.
+
+- **Autenticación**: Para verificar la identidad de los usuarios, implementamos un sistema de autenticación basado en tokens. Al iniciar sesión, los usuarios reciben un token de acceso (Bearer Token) que deben incluir en el encabezado `Authorization` de las solicitudes posteriores.
+
+  Ejemplo de encabezado de autorización:
+
+  ```
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE2MzE5OTI0NTh9.DWNejGLW-rfYjqJ8xUR5f_giVebZZotAqIOoIcctG44
+  ```
+
+  La duración de este token es limitada, este valor puede ser ajustado en las variables de entorno.
+
+### La aplicación cuenta con 3 módulos gestionados desde la API:
+
+#### CRUDs de Usuario
 Este módulo proporciona las operaciones básicas de Crear, Leer, Actualizar y Eliminar (CRUD) para los usuarios. Permite administrar la información de los usuarios en la base de datos, como nombres, correos electrónicos y roles asignados.
 
-### Login de Acceso
+#### Login de Acceso
 El módulo de Login de Acceso ofrece la funcionalidad para que los usuarios autenticados puedan iniciar sesión de manera segura en la aplicación. Se encarga de verificar las credenciales del usuario y generar tokens de acceso válidos.
 
-### Endpoints de Ghibli
+#### Endpoints de Ghibli
 En este módulo se encuentran los endpoints relacionados con la API de Ghibli, que proporciona información sobre las películas del estudio Ghibli. Estos endpoints están protegidos y solo pueden ser accedidos por usuarios autenticados con roles específicos. Dependiendo del rol del usuario, se restringe el acceso a ciertas funcionalidades y datos sensibles.
 
 
