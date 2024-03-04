@@ -4,7 +4,7 @@ from functools import wraps
 from fastapi import HTTPException, status
 from jose import jwt, JWTError
 
-from infrastrucure.environment import get_environment_variables
+from infrastructure.environment import get_environment_variables
 
 def has_permission(role_name: str):
     """
@@ -40,7 +40,7 @@ def has_permission(role_name: str):
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Token de acceso inválido"
-                )   from exc
+                ) from exc
         return wrapper
 
     return decorator

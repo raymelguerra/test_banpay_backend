@@ -2,7 +2,7 @@
  Módulo que define los servicios de autenticación
 """
 from fastapi import Depends
-from infrastrucure.security.authtentication import create_access_token, verify_password
+from infrastructure.security.authtentication import create_access_token, verify_password
 
 from repositories.user_repository import UserRepository
 from schemas.auth_schema import TokenSchema

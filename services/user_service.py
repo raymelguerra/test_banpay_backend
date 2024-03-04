@@ -4,7 +4,7 @@
 from typing import List, Optional
 from fastapi import Depends
 
-from infrastrucure.security.authtentication import get_password_hash
+from infrastructure.security.authtentication import get_password_hash
 from models.UserModel import User
 from repositories.user_repository import UserRepository
 from schemas.user_schema import (
@@ -41,7 +41,10 @@ class UserService:
         Returns:
             UserSchema: El usuario creado.
         """
+        role_name = instance.role_name
+        del instance.role_name
         user = User(**instance.model_dump())
+        user.role = self.user_repository.get_rol(role_name)
         user.password = get_password_hash(user.password)
         return self.user_repository.create(user)
 
@@ -96,5 +99,12 @@ class UserService:
         Returns:
             UserSchema: El usuario actualizado.
         """
-        user = User(**instance.model_dump())
-        return self.user_repository.update(user_id, user)
+        # user = instance.model_dump()
+        # user.id = user_id
+        if instance.role_name:
+            role = self.user_repository.get_rol(instance.role_name)
+            if role:
+                instance.role_id = role.id
+        if instance.password:
+            instance.password = get_password_hash(instance.password)
+        return self.user_repository.update(user_id, instance.model_dump())

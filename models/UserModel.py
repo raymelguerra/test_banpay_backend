@@ -17,7 +17,7 @@ class User(EntityMeta):
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
     password = Column(String)
-    
+
     # Se define la relación de uno a muchos con la tabla Role
     role_id = Column(Integer, ForeignKey('roles.id'))
     role = relationship("Role")

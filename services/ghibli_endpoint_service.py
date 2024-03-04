@@ -4,7 +4,7 @@
 from typing import TypeVar, List, Type
 from httpx import AsyncClient, HTTPStatusError, RequestError
 
-from infrastrucure.environment import  get_environment_variables
+from infrastructure.environment import  get_environment_variables
 
 T = TypeVar("T")
 

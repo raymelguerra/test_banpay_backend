@@ -2,9 +2,9 @@
     Módulo de los controladores del usuario
 """
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, Query
-from infrastrucure.decorators.role_decorator import has_permission
-from infrastrucure.security.authtentication import oauth2_scheme
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from infrastructure.decorators.role_decorator import has_permission
+from infrastructure.security.authtentication import oauth2_scheme
 
 from schemas.user_schema import (
     UserSchema,
@@ -108,8 +108,8 @@ def update(
         raise HTTPException(status_code=404, detail="User not found")
     return user
 
-@UserRouter.delete("/{user_id}", response_model=UserSchema)
-@has_permission('admin')
+@UserRouter.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+# @has_permission('admin')
 def delete(
     user_id: int,
     user_service: UserService = Depends(),
@@ -120,10 +120,8 @@ def delete(
     Args:
         user_id (int): El ID del usuario a eliminar.
 
-    Returns:
-        UserSchema: El usuario eliminado.
     """
     try:
-        return user_service.delete(user_id)
+        return user_service.delete(user_id)         
     except Exception as exc:
         raise HTTPException(status_code=404, detail="User not found") from exc

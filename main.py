@@ -2,16 +2,20 @@
 """
    Módulo principal, punto de inicio de la App
 """
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from infrastrucure.environment import get_environment_variables
-from infrastrucure.middlewares.sql_alchemy_middleware import SQLAlchemyMiddleware
+from infrastructure.environment import get_environment_variables
+from infrastructure.middlewares.sql_alchemy_middleware import SQLAlchemyMiddleware
 from metadata.tags import Tags
+from metadata.initializer_seeder import seed_data
 from models.BaseModel import init
 from routers.v1.auth_router import AuthRouter
 from routers.v1.ghibli_router import GhibliRouter
 from routers.v1.user_router import UserRouter
+from infrastructure.data_base import (
+    get_db_connection,
+)
 
 # Application Environment Configuration
 env = get_environment_variables()
@@ -41,3 +45,8 @@ app.include_router(GhibliRouter)
 
 # Initialize Data Model Attributes
 init()
+
+#Hacer carga inicial de los datos
+db = get_db_connection()
+seed_data(db)
+db.close()

@@ -10,8 +10,8 @@ from schemas.specie_schema import SpeciesSchema
 from schemas.vehicle_schema import VehicleSchema
 
 from services.ghibli_endpoint_service import GhibliService
-from infrastrucure.decorators.role_decorator import has_permission
-from infrastrucure.security.authtentication import oauth2_scheme
+from infrastructure.decorators.role_decorator import has_permission
+from infrastructure.security.authtentication import oauth2_scheme
 
 GhibliRouter = APIRouter(
     prefix="/ghibli", tags=["Rutas de Ghibli"],

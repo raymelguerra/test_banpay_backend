@@ -13,7 +13,7 @@ def get_env_filename():
     Retorna según el entorno activo los valores de las variables de entorno asociado.
     """
     runtime_env = os.getenv("ENV")
-    return f".env.{runtime_env}" if runtime_env else ".env"
+    return f"{runtime_env}.env" if runtime_env else ".env"
 
 
 class EnvironmentSettings(BaseSettings):

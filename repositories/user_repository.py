@@ -6,9 +6,9 @@ from typing import TypeVar, List, Optional
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
-from models.UserModel import User
+from models.UserModel import User, Role
 
-from infrastrucure.data_base import (
+from infrastructure.data_base import (
     get_db_connection,
 )
 
@@ -65,7 +65,7 @@ class UserRepository():
         """
         result = self.db.query(User)
         if query_params:
-            filters = {k: v for k, v in query_params.dict().items() if v is not None}
+            filters = {k: v for k, v in query_params.model_dump().items() if v is not None}
             result = result.filter_by(**filters)
         return result.offset(start).limit(limit).all()
 
@@ -98,28 +98,38 @@ class UserRepository():
             raise ValueError(f"No se encontró un usuario con el ID {id}")
         self.db.delete(instance)
         self.db.commit()
-        self.db.flush()
 
-    def update(self, user_id: int, instance: User) -> User:
+    async def update(self, user_id: int, user_data: dict) -> User:
         """
         Actualiza un usuario existente en la base de datos.
 
         Args:
             user_id (int): ID del usuario a actualizar.
-            instance (User): Instancia del usuario con los datos actualizados.
+            user_data (dict): Datos del usuario con los campos a actualizar.
 
         Returns:
             User: El usuario actualizado.
         """
-        db_user = self.db.query(User).filter(User.id == user_id).first()
+        db_user = self.db.get(User, user_id)
         if not db_user:
             return None
 
-        for field, value in vars(instance).items():
-            if value is not None:
+        # Actualizar los campos del usuario existente con los valores no nulos en user_data
+        for field, value in user_data.items():
+            if hasattr(db_user, field) and value is not None:
                 setattr(db_user, field, value)
 
-        instance.id = id
-        self.db.merge(instance)
         self.db.commit()
-        return instance
+        self.db.refresh(db_user)
+        return db_user
+
+    def get_rol(self, role_name: str) -> Role:
+        """Obtener un rol por su nombre
+
+        Args:
+            role_name (str): _description_
+
+        Returns:
+            Role: Retorna el rol encontrado
+        """
+        return self.db.query(Role).filter_by(name=role_name).first()

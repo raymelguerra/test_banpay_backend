@@ -1,6 +1,6 @@
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 
-from infrastrucure.data_base import Engine
+from infrastructure.data_base import Engine
 
 # Base Entity Model Schema
 EntityMeta = declarative_base()

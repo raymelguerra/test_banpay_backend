@@ -6,7 +6,7 @@ from jose import jwt
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 
-from infrastrucure.environment import get_environment_variables
+from infrastructure.environment import get_environment_variables
 
 env = get_environment_variables()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

@@ -2,8 +2,16 @@
 Módulo que define los esquemas Pydantic para los usuarios.
 """
 from typing import Optional
-from pydantic import BaseModel
+from enum import Enum
+from pydantic import BaseModel, EmailStr
 
+class RoleEnum(str, Enum):
+    admin = "admin"
+    films = "films"
+    people = "people"
+    locations = "locations"
+    species = "species"
+    vehicles = "vehicles"
 
 class RoleSchema(BaseModel):
     """
@@ -18,25 +26,25 @@ class UserBaseSchema(BaseModel):
     """
     username: str
     email: str
-    role_id: int
 
 class UserCreateRequestSchema(UserBaseSchema):
     """
     Representa el esquema de datos para la creación de un usuario.
     """
     username: str
-    email: str
+    email: EmailStr
     password: str
-    role_id: int
+    role_name:RoleEnum
 
 class UserUpdateRequestSchema(UserBaseSchema):
     """
     Representa el esquema de datos para la actualización de un usuario.
     """
     username: Optional[str] = None
-    email: Optional[str] = None
+    email: Optional[EmailStr] = None
     role_id: Optional[int] = None
     password: Optional[str] = None
+    role_name: Optional[str] = RoleEnum
 
 
 class UserSchema(UserBaseSchema):
@@ -45,6 +53,7 @@ class UserSchema(UserBaseSchema):
     """
     id: int
     role: Optional[RoleSchema]
+    role_id: int
 
 class UserQuerySchema(BaseModel):
     """

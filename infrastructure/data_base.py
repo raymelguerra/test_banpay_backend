@@ -4,7 +4,7 @@ Módulo de creación e interacción con la  base de datos
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from infrastrucure.environment import get_environment_variables
+from infrastructure.environment import get_environment_variables
 
 # Runtime Environment Configuration
 env = get_environment_variables()
@@ -27,7 +27,7 @@ SessionLocal = sessionmaker(
 
 def get_db_connection():
     """
-    Devuelve la conexión a la base ed datos
+    Devuelve la conexión a la base de datos
     """
     db = scoped_session(SessionLocal)
     try:
