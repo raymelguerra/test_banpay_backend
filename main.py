@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from infrastructure.environment import get_environment_variables
 from infrastructure.middlewares.sql_alchemy_middleware import SQLAlchemyMiddleware
-from metadata.tags_test import Tags
+from metadata.tags import Tags
 from metadata.initializer_seeder import seed_data
 from models.BaseModel import init
 from routers.v1.auth_router import AuthRouter
