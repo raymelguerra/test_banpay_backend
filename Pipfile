@@ -17,6 +17,8 @@ python-multipart = "*"
 bcrypt = "==4.0.1"
 httpx = "*"
 pydantic = {extras = ["email"], version = "*"}
+pytest-html = "*"
+uvicorn = "*"
 
 [dev-packages]
 pytest = "*"

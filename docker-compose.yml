@@ -1,18 +1,20 @@
 version: '3.9'
 
 services:
-  banpay_db_test:
+  banpay_db:
+    container_name: banpay_db
     image: postgres:14-alpine
     ports:
       - 5432:5432
-    volumes:
-      - ./data:/var/lib/postgresql/data
+    # volumes:
+    #   - ./data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=banpay_user
-      - POSTGRES_DB=banpay_db_test
+      - POSTGRES_DB=banpay_db
 
-  app:
+  banpay-app:
+    container_name: banpay-app
     build:
       context: .
       dockerfile: ./Dockerfile.app
@@ -20,26 +22,22 @@ services:
     ports:
       - 8000:8000
     env_file:
-      - test.env
-    environment:
-      - ENV=test
+      - prod.env
     depends_on:
-      - banpay_db_test
+      - banpay_db
     restart: on-failure
 
-  pytest:
+  banpay-test:
     build:
       context: .
       dockerfile: ./Dockerfile.test
     image: banpayapp_test:latest
     env_file:
-      - test.env
-    environment:
-      - ENV=test
+      - prod.env
     volumes:
-      - ./tests:/tests
-    command: ["pytest"]
+      - ./test_report:/app/test_report
+    command: ["pytest", "--html=test_report/report.html"]
     depends_on:
-      - banpay_db_test
-      - app
+      - banpay-app
+      - banpay_db
     restart: on-failure

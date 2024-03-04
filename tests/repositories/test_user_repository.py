@@ -4,6 +4,7 @@
 from typing import Generator
 import asyncio
 import pytest
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from models.UserModel import User, Role
 from infrastructure.data_base import (
@@ -94,12 +95,13 @@ def test_list_users(user_repository: UserRepository, db_session: Session):
             "role": admin_role,
         },
         {
-            "username": "Bob Dylan",
-            "email": "bob@example.com",
+            "username": "Juan Dylan",
+            "email": "juan@example.com",
             "password": "Password",
             "role": vehicle_role
         },
     ]
+    user_count = db_session.query(func.count(User.id)).scalar()
     for data in user_data:
         new_user = User(**data)
         new_user.password = get_password_hash(new_user.password)
@@ -107,11 +109,12 @@ def test_list_users(user_repository: UserRepository, db_session: Session):
     db_session.commit()
 
     users = user_repository.list(query_params=None, limit=10, start=0)
-    assert len(users) == 3
+    assert len(users) == user_count + 2
 
     # Limpiar después de la prueba
-    for new_user in user_data:
-        db_session.delete(new_user)
+    # for new_user in users:
+    #     db_session.delete(new_user)
+    db_session.query(User).delete()
     db_session.commit()
 
 
@@ -151,8 +154,8 @@ def test_delete_user(user_repository: UserRepository, db_session: Session):
     """
     vehicle_role = db_session.query(Role).filter_by(name="admin").first()
     user_data = {
-        "username": "david",
-        "email": "david@example.com",
+        "username": "pdero",
+        "email": "pedro@example.com",
         "password": "Password",
         "role": vehicle_role
     }
@@ -185,8 +188,8 @@ def test_list_users_with_filters(user_repository: UserRepository, db_session: Se
             "role": vehicle_role
         },
         {
-            "username": "Fiona",
-            "email": "fiona@example.com",
+            "username": "enrrique",
+            "email": "enrrique@example.com",
             "password": "Password",
             "role": vehicle_role
         },
@@ -204,6 +207,5 @@ def test_list_users_with_filters(user_repository: UserRepository, db_session: Se
     assert len(users) == 1
     assert users[0].username == "david"
 
-    # for new_user in user_data:
-    db_session.delete(new_user)
+    db_session.query(User).delete()
     db_session.commit()
